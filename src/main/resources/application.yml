@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    username: hyerim
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/netflixdb?serverTimezone=Asia/Seoul
