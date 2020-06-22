@@ -8,10 +8,8 @@
     <title>Netflix Review</title>
 </head>
 <body>
-    <h1> Hello ${name}</h1>
-    <form action="/upload?id=${id}" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" />
-        <input type="submit" value="file upload"/>
-    </form>
+
+url : ${url}
+
 </body>
 </html>
