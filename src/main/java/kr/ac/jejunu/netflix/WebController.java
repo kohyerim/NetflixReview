@@ -5,6 +5,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class WebController {
@@ -22,23 +30,60 @@ public class WebController {
         return userDao.findById(id).get();
     }
 
-    @GetMapping("/review")
-    public void review(){
+    @GetMapping("/fileupload")
+    public void fileupload(){
 
     }
 
-    @PostMapping("/review")
-    public ModelAndView review(@RequestParam("id") Integer id, @RequestParam("pw") String pw){
+    @PostMapping("/fileupload")
+    public ModelAndView fileupload(@RequestParam("id") Integer id, @RequestParam("pw") String pw){
         ModelAndView modelAndView;
         if (pw.equals(userDao.findById(id).get().getPw())){
-            modelAndView = new ModelAndView("web");
+            modelAndView = new ModelAndView("fileupload");
             modelAndView.addObject("name", userDao.findById(id).get().getName());
             modelAndView.addObject("id", userDao.findById(id).get().getId());
         }
         else{
             modelAndView = new ModelAndView(new RedirectView("/"));
         }
+        return modelAndView;
+    }
 
+    @RequestMapping("/review")
+    public ModelAndView review(@RequestParam(value = "id", required = false) Integer id,
+                               @RequestParam(value = "path", required = false) String path) throws IOException {
+
+        List<List<String>> list = new ArrayList<>();
+        List<String> titleList = new ArrayList<>();
+        BufferedReader br;
+        br = Files.newBufferedReader(Paths.get(path));
+        String line;
+        while ((line = br.readLine()) != null){
+            List<String> tmpList;
+            String[] array = line.split(",");
+            tmpList = Arrays.asList(array);
+            for(int i=0; i<tmpList.size(); i++){
+                 tmpList.set(i, tmpList.get(i).replaceAll("\"", ""));
+            }
+            List<String> tmpTitle = Arrays.asList(tmpList.get(0).split(":"));
+            String title = "";
+            String date = tmpList.get(tmpList.size()-1);
+            if(tmpTitle.size() == 1){
+                title = tmpTitle.get(0);
+            }
+            else{
+                title = tmpTitle.get(0) + tmpTitle.get(1);
+            }
+
+            if(!titleList.contains(title)){
+                titleList.add(title);
+                list.add(Arrays.asList(title, date));
+            }
+        }
+
+        ModelAndView modelAndView = new ModelAndView("review");
+        modelAndView.addObject("name", userDao.findById(id).get().getName());
+        modelAndView.addObject("list", list);
         return modelAndView;
     }
 }

@@ -11,7 +11,7 @@
 <body>
 <h1>HOME</h1>
 
-<form action="/review" method="post">
+<form action="/fileupload" method="post">
 id : <input type="text" name="id"/><br>
 pw : <input type="password" name="pw"><br>
 <button type = "submit">로그인</button>
