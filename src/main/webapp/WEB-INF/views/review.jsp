@@ -98,14 +98,13 @@ Bootstrap4 Card with Tabs by @mdeuerlein
     </script>
 </head>
 <body>
-<h1> Hello ${name} </h1>
 <div class="container">
     <div class="row">
         <div>
             <div class="card mt-3 tab-card">
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active p-3" role="tabpanel" aria-labelledby="one-tab">
-                        <h5 class="card-title">Tab Card One</h5>
+                        <h5 class="card-title">hello ${name}</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 </div>
             </div>

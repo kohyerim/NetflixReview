@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -38,12 +40,22 @@ public class WebController {
     }
 
     @PostMapping("/fileupload")
-    public ModelAndView fileupload(@RequestParam("id") Integer id, @RequestParam("pw") String pw){
-        ModelAndView modelAndView;
+    public ModelAndView fileupload(@RequestParam("id") Integer id, @RequestParam("pw") String pw,
+                                   HttpServletRequest request) throws IOException {
+        ModelAndView modelAndView = null;
         if (pw.equals(userDao.findById(id).get().getPw())){
-            modelAndView = new ModelAndView("fileupload");
-            modelAndView.addObject("name", userDao.findById(id).get().getName());
-            modelAndView.addObject("id", userDao.findById(id).get().getId());
+            String pathStr = request.getServletContext().getRealPath("/")+"WEB-INF/static/csv/" + id.toString() + "/";
+            File file = new File(pathStr);
+            if(!file.exists()){
+                modelAndView = new ModelAndView("fileupload");
+                modelAndView.addObject("name", userDao.findById(id).get().getName());
+                modelAndView.addObject("id", userDao.findById(id).get().getId());
+            }
+            else{
+                String fileName = "NetflixViewingHistory.csv";
+                String path = pathStr + fileName;
+                modelAndView = review(id, path);
+            }
         }
         else{
             modelAndView = new ModelAndView(new RedirectView("/"));
