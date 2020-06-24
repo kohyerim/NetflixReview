@@ -1,6 +1,7 @@
 package kr.ac.jejunu.netflix;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebController {
     private final UserDao userDao;
+    private final ReviewDao reviewDao;
 
     @RequestMapping("/")
     public ModelAndView index(){
@@ -83,7 +85,23 @@ public class WebController {
 
         ModelAndView modelAndView = new ModelAndView("review");
         modelAndView.addObject("name", userDao.findById(id).get().getName());
+        modelAndView.addObject("id", id);
         modelAndView.addObject("list", list);
+        return modelAndView;
+    }
+
+    @RequestMapping("/write")
+    public ModelAndView write(@RequestParam("select") String select,
+                              @RequestParam("id") Integer id){
+        String title = select.split(",")[0];
+        String date = select.split(",")[1];
+        System.out.println(reviewDao.findById(1).get());
+        ModelAndView modelAndView = new ModelAndView("write");
+        modelAndView.addObject("title", title);
+        modelAndView.addObject("date", date);
+        modelAndView.addObject("name", userDao.findById(id).get().getName());
+        modelAndView.addObject("id", id);
+
         return modelAndView;
     }
 }
