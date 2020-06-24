@@ -67,6 +67,7 @@
         <div class="col-md-9">
             <div class="contact-form">
                 <form action="/register" method="post">
+                    <input style="display: none" type="text" name="user_id" value="${id}">
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="netflix_title">Netflix Title</label>
                         <div class="col-sm-10">

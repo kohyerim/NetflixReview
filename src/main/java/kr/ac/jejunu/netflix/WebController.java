@@ -1,7 +1,6 @@
 package kr.ac.jejunu.netflix;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -107,12 +106,40 @@ public class WebController {
                               @RequestParam("id") Integer id){
         String title = select.split(",")[0];
         String date = select.split(",")[1];
-        System.out.println(reviewDao.findById(1).get());
         ModelAndView modelAndView = new ModelAndView("write");
         modelAndView.addObject("title", title);
         modelAndView.addObject("date", date);
         modelAndView.addObject("name", userDao.findById(id).get().getName());
         modelAndView.addObject("id", id);
+
+        return modelAndView;
+    }
+
+    @RequestMapping("/register")
+    public ModelAndView register(@RequestParam("netflix_title") String netflix_title,
+                                 @RequestParam("user_id") String user_id,
+                                 @RequestParam("date") String date,
+                                 @RequestParam("review_title") String review_title,
+                                 @RequestParam("comment") String comment,
+                                 @RequestParam("stars") Integer stars,
+                                 HttpServletRequest request){
+
+        String pathStr = request.getServletContext().getRealPath("/")+"WEB-INF/static/csv/" + user_id + "/";
+        String fileName = "NetflixViewingHistory.csv";
+        String path = pathStr + fileName;
+        ModelAndView modelAndView = new ModelAndView("register");
+        modelAndView.addObject("id", user_id);
+        modelAndView.addObject("path", path);
+
+        Review review = new Review();
+        review.setNetflix_title(netflix_title);
+        review.setUser_id(Integer.valueOf(user_id));
+        review.setReview_title(review_title);
+        review.setDate(date);
+        review.setReview_content(comment);
+        review.setStars(stars);
+
+        reviewDao.save(review);
 
         return modelAndView;
     }
