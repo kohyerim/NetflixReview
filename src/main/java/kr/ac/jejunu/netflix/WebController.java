@@ -131,14 +131,7 @@ public class WebController {
         redirectView.addStaticAttribute("id", user_id);
 
         Review review = new Review();
-        review.setNetflix_title(netflix_title);
-        review.setUser_id(user_id);
-        review.setReview_title(review_title);
-        review.setDate(date);
-        review.setReview_content(comment.replaceAll("\r\n", "<br>"));
-        review.setStars(stars);
-
-        reviewDao.save(review);
+        saveReview(user_id, netflix_title, date, review_title, comment, stars, review);
 
         return redirectView;
     }
@@ -147,7 +140,7 @@ public class WebController {
     public ModelAndView view(@RequestParam("review_id") Integer review_id){
         Review review = reviewDao.findById(review_id).get();
         ModelAndView modelAndView = new ModelAndView("view");
-        return getModelAndView(review_id, review, modelAndView);
+        return getModelAndView(review_id, review, review.getReview_content(), modelAndView);
     }
 
     @RequestMapping(value = "delete")
@@ -165,17 +158,17 @@ public class WebController {
     public ModelAndView edit(@RequestParam("review_id") Integer review_id){
         Review review = reviewDao.findById(review_id).get();
         ModelAndView modelAndView = new ModelAndView("edit");
-        return getModelAndView(review_id, review, modelAndView);
+        return getModelAndView(review_id, review, review.getReview_content().replaceAll("<br>", "\n"), modelAndView);
     }
 
-    private ModelAndView getModelAndView(@RequestParam("review_id") Integer review_id, Review review, ModelAndView modelAndView) {
+    private ModelAndView getModelAndView(@RequestParam("review_id") Integer review_id, Review review, String comment, ModelAndView modelAndView) {
         modelAndView.addObject("review_id", review_id);
         modelAndView.addObject("user_id", reviewDao.findById(review_id).get().getUser_id());
         modelAndView.addObject("title", review.getNetflix_title());
         modelAndView.addObject("date", review.getDate());
         modelAndView.addObject("name", userDao.findById(reviewDao.findById(review_id).get().getUser_id()).get().getName());
         modelAndView.addObject("review_title", review.getReview_title());
-        modelAndView.addObject("comment", review.getReview_content());
+        modelAndView.addObject("comment", comment);
         modelAndView.addObject("stars", review.getStars());
 
         return modelAndView;
@@ -183,18 +176,29 @@ public class WebController {
 
     @RequestMapping(value = "update")
     public RedirectView update(@RequestParam("review_id") Integer review_id,
+                               @RequestParam("user_id") Integer user_id,
+                               @RequestParam("netflix_title") String netflix_title,
+                               @RequestParam("date") String date,
                                @RequestParam("review_title") String review_title,
                                @RequestParam("comment") String comment,
                                @RequestParam("stars") Integer stars){
         Review review = reviewDao.findById(review_id).get();
-        review.setReview_title(review_title);
-        review.setReview_content(comment);
-        review.setStars(stars);
-        reviewDao.save(review);
+        saveReview(user_id, netflix_title, date, review_title, comment, stars, review);
 
         RedirectView redirectView = new RedirectView("/review");
         redirectView.addStaticAttribute("id", review.getUser_id());
 
         return redirectView;
+    }
+
+    private void saveReview(@RequestParam("user_id") Integer user_id, @RequestParam("title") String netflix_title, @RequestParam("date") String date, @RequestParam("review_title") String review_title, @RequestParam("comment") String comment, @RequestParam("stars") Integer stars, Review review) {
+        review.setNetflix_title(netflix_title);
+        review.setUser_id(user_id);
+        review.setReview_title(review_title);
+        review.setDate(date);
+        review.setReview_content(comment.replaceAll("\r\n", "<br>"));
+        review.setStars(stars);
+
+        reviewDao.save(review);
     }
 }
