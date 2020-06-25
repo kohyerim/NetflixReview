@@ -121,7 +121,7 @@ public class WebController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public RedirectView register(@RequestParam("netflix_title") String netflix_title,
-                                 @RequestParam("user_id") String user_id,
+                                 @RequestParam("user_id") Integer user_id,
                                  @RequestParam("date") String date,
                                  @RequestParam("review_title") String review_title,
                                  @RequestParam("comment") String comment,
@@ -132,7 +132,7 @@ public class WebController {
 
         Review review = new Review();
         review.setNetflix_title(netflix_title);
-        review.setUser_id(Integer.valueOf(user_id));
+        review.setUser_id(user_id);
         review.setReview_title(review_title);
         review.setDate(date);
         review.setReview_content(comment.replaceAll("\r\n", "<br>"));
