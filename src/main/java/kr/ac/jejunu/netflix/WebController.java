@@ -125,8 +125,7 @@ public class WebController {
                                  @RequestParam("date") String date,
                                  @RequestParam("review_title") String review_title,
                                  @RequestParam("comment") String comment,
-                                 @RequestParam("stars") Integer stars,
-                                 HttpServletRequest request){
+                                 @RequestParam("stars") Integer stars){
 
         RedirectView redirectView = new RedirectView("/review");
         redirectView.addStaticAttribute("id", user_id);
@@ -148,7 +147,30 @@ public class WebController {
     public ModelAndView view(@RequestParam("review_id") Integer review_id){
         Review review = reviewDao.findById(review_id).get();
         ModelAndView modelAndView = new ModelAndView("view");
-        modelAndView.addObject("id", review_id);
+        return getModelAndView(review_id, review, modelAndView);
+    }
+
+    @RequestMapping(value = "delete")
+    public RedirectView delete(@RequestParam("review_id") Integer review_id){
+        Review review = reviewDao.findById(review_id).get();
+        reviewDao.deleteById(review_id);
+
+        RedirectView redirectView = new RedirectView("/review");
+        redirectView.addStaticAttribute("id", review.getUser_id());
+
+        return redirectView;
+    }
+
+    @RequestMapping(value = "edit")
+    public ModelAndView edit(@RequestParam("review_id") Integer review_id){
+        Review review = reviewDao.findById(review_id).get();
+        ModelAndView modelAndView = new ModelAndView("edit");
+        return getModelAndView(review_id, review, modelAndView);
+    }
+
+    private ModelAndView getModelAndView(@RequestParam("review_id") Integer review_id, Review review, ModelAndView modelAndView) {
+        modelAndView.addObject("review_id", review_id);
+        modelAndView.addObject("user_id", reviewDao.findById(review_id).get().getUser_id());
         modelAndView.addObject("title", review.getNetflix_title());
         modelAndView.addObject("date", review.getDate());
         modelAndView.addObject("name", userDao.findById(reviewDao.findById(review_id).get().getUser_id()).get().getName());
@@ -159,10 +181,16 @@ public class WebController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "delete")
-    public RedirectView delete(@RequestParam("review_id") Integer review_id){
+    @RequestMapping(value = "update")
+    public RedirectView update(@RequestParam("review_id") Integer review_id,
+                               @RequestParam("review_title") String review_title,
+                               @RequestParam("comment") String comment,
+                               @RequestParam("stars") Integer stars){
         Review review = reviewDao.findById(review_id).get();
-        reviewDao.deleteById(review_id);
+        review.setReview_title(review_title);
+        review.setReview_content(comment);
+        review.setStars(stars);
+        reviewDao.save(review);
 
         RedirectView redirectView = new RedirectView("/review");
         redirectView.addStaticAttribute("id", review.getUser_id());

@@ -54,6 +54,49 @@
             box-shadow:none;
         }
     </style>
+    <script>
+        function checkStars(num){
+            switch (num) {
+                case 1 :
+                    document.write("<option value=\"1\" selected>★☆☆☆☆</option>\n" +
+                        "                                <option value=\"2\">★★☆☆☆</option>\n" +
+                        "                                <option value=\"3\">★★★☆☆</option>\n" +
+                        "                                <option value=\"4\">★★★★☆</option>\n" +
+                        "                                <option value=\"5\" >★★★★★</option>");
+                    break;
+                case 2 :
+                    document.write("<option value=\"1\">★☆☆☆☆</option>\n" +
+                        "                                <option value=\"2\" selected>★★☆☆☆</option>\n" +
+                        "                                <option value=\"3\">★★★☆☆</option>\n" +
+                        "                                <option value=\"4\">★★★★☆</option>\n" +
+                        "                                <option value=\"5\" >★★★★★</option>");
+                    break;
+                case 3 :
+                    document.write("<option value=\"1\">★☆☆☆☆</option>\n" +
+                        "                                <option value=\"2\">★★☆☆☆</option>\n" +
+                        "                                <option value=\"3\" selected>★★★☆☆</option>\n" +
+                        "                                <option value=\"4\">★★★★☆</option>\n" +
+                        "                                <option value=\"5\" >★★★★★</option>");
+                    break;
+                case 4 :
+                    document.write("<option value=\"1\">★☆☆☆☆</option>\n" +
+                        "                                <option value=\"2\">★★☆☆☆</option>\n" +
+                        "                                <option value=\"3\">★★★☆☆</option>\n" +
+                        "                                <option value=\"4\" selected>★★★★☆</option>\n" +
+                        "                                <option value=\"5\" >★★★★★</option>");
+                    break;
+                case 5 :
+                    document.write("<option value=\"1\">★☆☆☆☆</option>\n" +
+                        "                                <option value=\"2\">★★☆☆☆</option>\n" +
+                        "                                <option value=\"3\">★★★☆☆</option>\n" +
+                        "                                <option value=\"4\">★★★★☆</option>\n" +
+                        "                                <option value=\"5\" selected>★★★★★</option>");
+                    break;
+                default :
+                    return null;
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="container contact">
@@ -66,8 +109,9 @@
         </div>
         <div class="col-md-9">
             <div class="contact-form">
-                <form action="/register" method="post">
+                <form action="/update" method="post">
                     <input style="display: none" type="text" name="user_id" value="${user_id}">
+                    <input style="display: none" type="text" name="review_id" value="${review_id}">
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="netflix_title">Netflix Title</label>
                         <div class="col-sm-10">
@@ -89,24 +133,20 @@
                     <div class="form-group">
                         <label class="control-label col-sm-3" for="review_title">Review Title</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="review_title" placeholder="Enter Review Title" name="review_title">
+                            <input type="text" class="form-control" id="review_title" value="${review_title}" name="review_title">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="comment">Comment</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" rows="5" id="comment" name="comment"></textarea>
+                            <textarea class="form-control" rows="5" id="comment" name="comment">${comment}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="stars">Stars</label>
                         <div class="col-sm-10">
                             <select name="stars" id="stars">
-                                <option value="1">★☆☆☆☆</option>
-                                <option value="2">★★☆☆☆</option>
-                                <option value="3">★★★☆☆</option>
-                                <option value="4">★★★★☆</option>
-                                <option value="5" selected>★★★★★</option>
+                                <script>checkStars(${stars});</script>
                             </select>
                         </div>
                     </div>
