@@ -21,13 +21,14 @@
             padding: 4%;
             height: 400px;
         }
-        .orange{
-            background: #ff9b00;
+        .blue{
+            background: #428bca;
             padding: 4%;
             border-top-left-radius: 0.5rem;
             border-bottom-left-radius: 0.5rem;
         }
         .contact-info{
+            color: #fff;
             margin-top:10%;
         }
         .contact-info img{
@@ -59,7 +60,7 @@
 <body>
 <div class="container contact">
     <div class="row">
-        <div class="col-md-6 orange">
+        <div class="col-md-6 blue">
             <div class="contact-info">
                 <h2>Review</h2>
                 <div class="row">

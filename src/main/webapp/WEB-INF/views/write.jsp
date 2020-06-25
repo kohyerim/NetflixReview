@@ -21,12 +21,13 @@
             height: 400px;
         }
         .col-md-3{
-            background: #ff9b00;
+            background: #428bca;
             padding: 4%;
             border-top-left-radius: 0.5rem;
             border-bottom-left-radius: 0.5rem;
         }
         .contact-info{
+            color: #fff;
             margin-top:10%;
         }
         .contact-info img{
