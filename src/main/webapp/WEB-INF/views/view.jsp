@@ -157,24 +157,26 @@
                 </div>
             </div>
             <div class="contact-form">
-                <form action="/edit" method="post">
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <input style="display: none" type="text" name="review_id" value="${review_id}">
-                            <button type="submit" class="btn btn-default">수정</button>
+                <div class="col-sm-20">
+                    <form action="/edit" method="post">
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input style="display: none" type="text" name="review_id" value="${review_id}">
+                                <button type="submit" class="btn btn-default">수정</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <div class="contact-form">
-                <form action="/delete" method="get">
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <input style="display: none" type="text" name="review_id" value="${review_id}">
-                            <button type="submit" class="btn btn-default">삭제</button>
+                    </form>
+                </div>
+                <div class="col-sm-10">
+                    <form action="/delete" method="get">
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-20">
+                                <input style="display: none" type="text" name="review_id" value="${review_id}">
+                                <button type="submit" class="btn btn-default">삭제</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

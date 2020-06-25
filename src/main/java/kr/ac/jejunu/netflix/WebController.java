@@ -23,9 +23,7 @@ public class WebController {
 
     @RequestMapping("/")
     public ModelAndView index(){
-        ModelAndView modelAndView = new ModelAndView("index");
-
-        return modelAndView;
+        return new ModelAndView("index");
     }
 
     @GetMapping("/user/{id}")
@@ -33,14 +31,8 @@ public class WebController {
         return userDao.findById(id).get();
     }
 
-    @GetMapping("/fileupload")
-    public void fileupload(){
-
-    }
-
-    @PostMapping("/fileupload")
-    public Object fileupload(@RequestParam("id") Integer id, @RequestParam("pw") String pw,
-                             HttpServletRequest request){
+    @RequestMapping(value = "/fileupload", method = RequestMethod.POST)
+    public Object fileupload(@RequestParam("user_id") Integer id, @RequestParam("pw") String pw){
         RedirectView redirectView;
         if (pw.equals(userDao.findById(id).get().getPw())){
             File file = new File(userDao.findById(id).get().getPath());
@@ -48,23 +40,22 @@ public class WebController {
                 ModelAndView modelAndView;
                 modelAndView = new ModelAndView("fileupload");
                 modelAndView.addObject("name", userDao.findById(id).get().getName());
-                modelAndView.addObject("id", userDao.findById(id).get().getId());
+                modelAndView.addObject("user_id", userDao.findById(id).get().getId());
                 return modelAndView;
             }
             else{
                 redirectView = new RedirectView("review");
-                redirectView.addStaticAttribute("id", id);
+                redirectView.addStaticAttribute("user_id", id);
             }
         }
         else{
-            redirectView = new RedirectView("review");
+            redirectView = new RedirectView("/");
         }
         return redirectView;
     }
 
     @RequestMapping("/review")
-    public ModelAndView review(@RequestParam(value = "id", required = false) Integer id) throws IOException {
-
+    public ModelAndView review(@RequestParam(value = "user_id", required = false) Integer id) throws IOException {
         List<List<String>> list = new ArrayList<>();
         List<String> titleList = new ArrayList<>();
         BufferedReader br;
@@ -97,7 +88,7 @@ public class WebController {
 
         ModelAndView modelAndView = new ModelAndView("review");
         modelAndView.addObject("name", userDao.findById(id).get().getName());
-        modelAndView.addObject("id", id);
+        modelAndView.addObject("user_id", id);
         modelAndView.addObject("list", list);
         modelAndView.addObject("reviews", reviews);
 
@@ -107,14 +98,14 @@ public class WebController {
 
     @RequestMapping("/write")
     public ModelAndView write(@RequestParam("select") String select,
-                              @RequestParam("id") Integer id){
+                              @RequestParam("user_id") Integer id){
         String title = select.split(",")[0];
         String date = select.split(",")[1];
         ModelAndView modelAndView = new ModelAndView("write");
         modelAndView.addObject("title", title);
         modelAndView.addObject("date", date);
         modelAndView.addObject("name", userDao.findById(id).get().getName());
-        modelAndView.addObject("id", id);
+        modelAndView.addObject("user_id", id);
 
         return modelAndView;
     }
@@ -128,7 +119,7 @@ public class WebController {
                                  @RequestParam("stars") Integer stars){
 
         RedirectView redirectView = new RedirectView("/review");
-        redirectView.addStaticAttribute("id", user_id);
+        redirectView.addStaticAttribute("user_id", user_id);
 
         Review review = new Review();
         saveReview(user_id, netflix_title, date, review_title, comment, stars, review);
@@ -186,7 +177,7 @@ public class WebController {
         saveReview(user_id, netflix_title, date, review_title, comment, stars, review);
 
         RedirectView redirectView = new RedirectView("/review");
-        redirectView.addStaticAttribute("id", review.getUser_id());
+        redirectView.addStaticAttribute("user_id", review.getUser_id());
 
         return redirectView;
     }

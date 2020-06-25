@@ -76,19 +76,13 @@
             -webkit-border-radius: 50%;
             border-radius: 50%;
         }
-        .need-help
-        {
-            margin-top: 10px;
-        }
-        .new-account
-        {
-            display: block;
-            margin-top: 10px;
+        body{
+            background-color: #B6B6B6;
         }
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container" style="margin-top:10%">
     <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
             <h1 class="text-center login-title"> NETFLIX REVIEW </h1>
@@ -96,7 +90,7 @@
                 <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
                      alt="">
                 <form class="form-signin" action="/fileupload" method="post">
-                    <input type="text" class="form-control" placeholder="ID" name="id">
+                    <input type="text" class="form-control" placeholder="ID" name="user_id">
                     <input type="password" class="form-control" placeholder="Password" name="pw">
                     <button class="btn btn-lg btn-primary btn-block" type="submit">
                         Sign in</button>
