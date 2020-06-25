@@ -14,7 +14,9 @@ import java.io.*;
 @RequiredArgsConstructor
 public class FileController {
     @RequestMapping("/upload")
-    public ModelAndView upload(@RequestParam("id") Integer id, @RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
+    public ModelAndView upload(@RequestParam("user_id") Integer id,
+                               @RequestParam("file") MultipartFile file,
+                               HttpServletRequest request) throws IOException {
         String pathStr = request.getServletContext().getRealPath("/")+"WEB-INF/static/csv/" + id.toString() + "/";
         File folderMaker = new File(pathStr);
         if(!folderMaker.exists()){
@@ -27,7 +29,7 @@ public class FileController {
         bufferedOutputStream.close();
 
         ModelAndView modelAndView = new ModelAndView("upload");
-        modelAndView.addObject("id", id);
+        modelAndView.addObject("user_id", id);
         modelAndView.addObject("path", pathStr+file.getOriginalFilename());
 
         return modelAndView;

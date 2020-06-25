@@ -46,31 +46,25 @@ public class WebController {
         else {
             redirectView = new RedirectView("fileupload");
             redirectView.addStaticAttribute("user_id", user_id);
-            redirectView.addStaticAttribute("pw", pw);
         }
 
         return redirectView;
     }
 
     @RequestMapping(value = "/fileupload")
-    public Object fileupload(@RequestParam("user_id") Integer id, @RequestParam("pw") String pw){
+    public Object fileupload(@RequestParam("user_id") Integer id){
         RedirectView redirectView;
-        if (pw.equals(userDao.findById(id).get().getPw())){
-            File file = new File(userDao.findById(id).get().getPath());
-            if(!file.exists()){
-                ModelAndView modelAndView;
-                modelAndView = new ModelAndView("fileupload");
-                modelAndView.addObject("name", userDao.findById(id).get().getName());
-                modelAndView.addObject("user_id", userDao.findById(id).get().getId());
-                return modelAndView;
-            }
-            else{
-                redirectView = new RedirectView("review");
-                redirectView.addStaticAttribute("user_id", id);
-            }
+        File file = new File(userDao.findById(id).get().getPath());
+        if(!file.exists()){
+            ModelAndView modelAndView;
+            modelAndView = new ModelAndView("fileupload");
+            modelAndView.addObject("name", userDao.findById(id).get().getName());
+            modelAndView.addObject("user_id", userDao.findById(id).get().getId());
+            return modelAndView;
         }
         else{
-            redirectView = new RedirectView("/");
+            redirectView = new RedirectView("review");
+            redirectView.addStaticAttribute("user_id", id);
         }
         return redirectView;
     }

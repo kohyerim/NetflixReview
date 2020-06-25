@@ -61,7 +61,7 @@
             <!-- Standar Form -->
             <h4>${name}님 안녕하세요</h4>
             <form action="/upload" method="post" enctype="multipart/form-data" id="js-upload-form">
-                <div style="display: none"><input type="text" name="id" value=${id} /></div>
+                <div style="display: none"><input type="text" name="user_id" value=${user_id} /></div>
                 <div class="form-inline">
                     <div class="form-group">
                         <input type="file" name="file" id="js-upload-files">

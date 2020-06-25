@@ -9,7 +9,7 @@
 </head>
 <body>
 <form name="hiddenForm" action="/review" method="post">
-    <input type="hidden" name="id" value=${id}>
+    <input type="hidden" name="user_id" value=${user_id}>
     <input type="hidden" name="path" value=${path}>
 </form>
 <script>
