@@ -15,4 +15,5 @@ public class User {
     private Integer id;
     private String pw;
     private String name;
+    private String path;
 }

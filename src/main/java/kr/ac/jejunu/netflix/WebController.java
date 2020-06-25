@@ -43,10 +43,7 @@ public class WebController {
                              HttpServletRequest request){
         RedirectView redirectView;
         if (pw.equals(userDao.findById(id).get().getPw())){
-            String pathStr = request.getServletContext().getRealPath("/")+"WEB-INF/static/csv/" + id.toString() + "/";
-            String fileName = "NetflixViewingHistory.csv";
-            String path = pathStr + fileName;
-            File file = new File(path);
+            File file = new File(userDao.findById(id).get().getPath());
             if(!file.exists()){
                 ModelAndView modelAndView;
                 modelAndView = new ModelAndView("fileupload");
@@ -57,7 +54,6 @@ public class WebController {
             else{
                 redirectView = new RedirectView("review");
                 redirectView.addStaticAttribute("id", id);
-                redirectView.addStaticAttribute("path", path);
             }
         }
         else{
@@ -67,13 +63,12 @@ public class WebController {
     }
 
     @RequestMapping("/review")
-    public ModelAndView review(@RequestParam(value = "id", required = false) Integer id,
-                               @RequestParam(value = "path", required = false) String path) throws IOException {
+    public ModelAndView review(@RequestParam(value = "id", required = false) Integer id) throws IOException {
 
         List<List<String>> list = new ArrayList<>();
         List<String> titleList = new ArrayList<>();
         BufferedReader br;
-        br = Files.newBufferedReader(Paths.get(path));
+        br = Files.newBufferedReader(Paths.get(userDao.findById(id).get().getPath()));
         String line;
         while ((line = br.readLine()) != null){
             List<String> tmpList;
@@ -133,12 +128,8 @@ public class WebController {
                                  @RequestParam("stars") Integer stars,
                                  HttpServletRequest request){
 
-        String pathStr = request.getServletContext().getRealPath("/")+"WEB-INF/static/csv/" + user_id + "/";
-        String fileName = "NetflixViewingHistory.csv";
-        String path = pathStr + fileName;
         RedirectView redirectView = new RedirectView("/review");
         redirectView.addStaticAttribute("id", user_id);
-        redirectView.addStaticAttribute("path", path);
 
         Review review = new Review();
         review.setNetflix_title(netflix_title);
@@ -151,5 +142,19 @@ public class WebController {
         reviewDao.save(review);
 
         return redirectView;
+    }
+
+    @RequestMapping(value = "view")
+    public ModelAndView view(@RequestParam("review_id") Integer review_id){
+        Review review = reviewDao.findById(review_id).get();
+        ModelAndView modelAndView = new ModelAndView("view");
+        modelAndView.addObject("title", review.getNetflix_title());
+        modelAndView.addObject("date", review.getDate());
+        modelAndView.addObject("name", userDao.findById(reviewDao.findById(review_id).get().getUser_id()).get().getName());
+        modelAndView.addObject("review_title", review.getReview_title());
+        modelAndView.addObject("comment", review.getReview_content());
+        modelAndView.addObject("stars", review.getStars());
+
+        return modelAndView;
     }
 }

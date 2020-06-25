@@ -117,7 +117,7 @@ Bootstrap4 Card with Tabs by @mdeuerlein
         <div class="card mt-3 tab-card">
             <div class="tab-content">
                 <div class="tab-pane fade show active p-3" role="tabpanel" aria-labelledby="one-tab"
-                     onclick=location.href="/view?review_id=${review.review_id}&user_id=${review.user_id}">
+                     onclick=location.href="/view?review_id=${review.review_id}">
                     [${review.netflix_title}]
                     ${review.review_title}
                 </div>
