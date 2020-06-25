@@ -100,21 +100,6 @@ Bootstrap4 Card with Tabs by @mdeuerlein
 <body>
 <div class="container">
     <div class="row">
-        <div>
-            <div class="card mt-3 tab-card">
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active p-3" role="tabpanel" aria-labelledby="one-tab">
-                        <h5 class="card-title">hello ${name}</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-<div class="container">
-    <div class="row">
         <div class="col-sm-6">
             <form action="write" class="form-inline" method="post">
                 <div style="display: none"><input type="text" name="id" value=${id} /></div>
@@ -127,6 +112,19 @@ Bootstrap4 Card with Tabs by @mdeuerlein
             </form>
         </div>
     </div>
+
+    <c:forEach items="${reviews}" var="review">
+        <div class="card mt-3 tab-card">
+            <div class="tab-content">
+                <div class="tab-pane fade show active p-3" role="tabpanel" aria-labelledby="one-tab"
+                     onclick=location.href="/view?review_id=${review.review_id}&user_id=${review.user_id}">
+                    [${review.netflix_title}]
+                    ${review.review_title}
+                </div>
+            </div>
+        </div>
+    </c:forEach>
 </div>
+
 </body>
 </html>

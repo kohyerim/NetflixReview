@@ -39,27 +39,31 @@ public class WebController {
     }
 
     @PostMapping("/fileupload")
-    public ModelAndView fileupload(@RequestParam("id") Integer id, @RequestParam("pw") String pw,
-                                   HttpServletRequest request) throws IOException {
-        ModelAndView modelAndView = null;
+    public Object fileupload(@RequestParam("id") Integer id, @RequestParam("pw") String pw,
+                             HttpServletRequest request){
+        RedirectView redirectView;
         if (pw.equals(userDao.findById(id).get().getPw())){
             String pathStr = request.getServletContext().getRealPath("/")+"WEB-INF/static/csv/" + id.toString() + "/";
-            File file = new File(pathStr);
+            String fileName = "NetflixViewingHistory.csv";
+            String path = pathStr + fileName;
+            File file = new File(path);
             if(!file.exists()){
+                ModelAndView modelAndView;
                 modelAndView = new ModelAndView("fileupload");
                 modelAndView.addObject("name", userDao.findById(id).get().getName());
                 modelAndView.addObject("id", userDao.findById(id).get().getId());
+                return modelAndView;
             }
             else{
-                String fileName = "NetflixViewingHistory.csv";
-                String path = pathStr + fileName;
-                modelAndView = review(id, path);
+                redirectView = new RedirectView("review");
+                redirectView.addStaticAttribute("id", id);
+                redirectView.addStaticAttribute("path", path);
             }
         }
         else{
-            modelAndView = new ModelAndView(new RedirectView("/"));
+            redirectView = new RedirectView("review");
         }
-        return modelAndView;
+        return redirectView;
     }
 
     @RequestMapping("/review")
@@ -94,10 +98,15 @@ public class WebController {
             }
         }
 
+        List<Review> reviews = reviewDao.findAll();
+
         ModelAndView modelAndView = new ModelAndView("review");
         modelAndView.addObject("name", userDao.findById(id).get().getName());
         modelAndView.addObject("id", id);
         modelAndView.addObject("list", list);
+        modelAndView.addObject("reviews", reviews);
+
+
         return modelAndView;
     }
 
@@ -115,8 +124,8 @@ public class WebController {
         return modelAndView;
     }
 
-    @RequestMapping("/register")
-    public ModelAndView register(@RequestParam("netflix_title") String netflix_title,
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public RedirectView register(@RequestParam("netflix_title") String netflix_title,
                                  @RequestParam("user_id") String user_id,
                                  @RequestParam("date") String date,
                                  @RequestParam("review_title") String review_title,
@@ -127,20 +136,20 @@ public class WebController {
         String pathStr = request.getServletContext().getRealPath("/")+"WEB-INF/static/csv/" + user_id + "/";
         String fileName = "NetflixViewingHistory.csv";
         String path = pathStr + fileName;
-        ModelAndView modelAndView = new ModelAndView("register");
-        modelAndView.addObject("id", user_id);
-        modelAndView.addObject("path", path);
+        RedirectView redirectView = new RedirectView("/review");
+        redirectView.addStaticAttribute("id", user_id);
+        redirectView.addStaticAttribute("path", path);
 
         Review review = new Review();
         review.setNetflix_title(netflix_title);
         review.setUser_id(Integer.valueOf(user_id));
         review.setReview_title(review_title);
         review.setDate(date);
-        review.setReview_content(comment);
+        review.setReview_content(comment.replaceAll("\r\n", "<br>"));
         review.setStars(stars);
 
         reviewDao.save(review);
 
-        return modelAndView;
+        return redirectView;
     }
 }
