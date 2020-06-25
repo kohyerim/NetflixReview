@@ -148,6 +148,7 @@ public class WebController {
     public ModelAndView view(@RequestParam("review_id") Integer review_id){
         Review review = reviewDao.findById(review_id).get();
         ModelAndView modelAndView = new ModelAndView("view");
+        modelAndView.addObject("id", review_id);
         modelAndView.addObject("title", review.getNetflix_title());
         modelAndView.addObject("date", review.getDate());
         modelAndView.addObject("name", userDao.findById(reviewDao.findById(review_id).get().getUser_id()).get().getName());
@@ -156,5 +157,16 @@ public class WebController {
         modelAndView.addObject("stars", review.getStars());
 
         return modelAndView;
+    }
+
+    @RequestMapping(value = "delete")
+    public RedirectView delete(@RequestParam("review_id") Integer review_id){
+        Review review = reviewDao.findById(review_id).get();
+        reviewDao.deleteById(review_id);
+
+        RedirectView redirectView = new RedirectView("/review");
+        redirectView.addStaticAttribute("id", review.getUser_id());
+
+        return redirectView;
     }
 }

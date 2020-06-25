@@ -157,18 +157,20 @@
                 </div>
             </div>
             <div class="contact-form">
-                <form action="/edit" method="post">
+                <form action="/edit" method="get">
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
+                            <input style="display: none" type="text" name="review_id" value="${id}">
                             <button type="submit" class="btn btn-default">수정</button>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="contact-form">
-                <form action="/delete" method="post">
+                <form action="/delete" method="get">
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
+                            <input style="display: none" type="text" name="review_id" value="${id}">
                             <button type="submit" class="btn btn-default">삭제</button>
                         </div>
                     </div>
