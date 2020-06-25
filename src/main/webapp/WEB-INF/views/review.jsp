@@ -30,6 +30,7 @@
         .contact-info{
             color: #fff;
             margin-top:10%;
+            margin-bottom: 15%;
         }
         .contact-info img{
             margin-bottom: 15%;

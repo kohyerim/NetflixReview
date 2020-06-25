@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -23,15 +22,37 @@ public class WebController {
 
     @RequestMapping("/")
     public ModelAndView index(){
-        return new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("index");
+
+        return modelAndView;
     }
 
-    @GetMapping("/user/{id}")
-    public User get(@PathVariable("id") Integer id){
-        return userDao.findById(id).get();
+    @RequestMapping("/login")
+    public RedirectView login(@RequestParam("email") String email,
+                              @RequestParam("pw") String pw){
+        RedirectView redirectView;
+        List<User> users = userDao.findAll();
+        Integer user_id = null;
+        for(int i = 0; i<users.size(); i++){
+            if(users.get(i).getEmail().equals(email) && users.get(i).getPw().equals(pw)){
+                user_id = i+1;
+                break;
+            }
+        }
+
+        if(user_id==null){
+            redirectView = new RedirectView("/");
+        }
+        else {
+            redirectView = new RedirectView("fileupload");
+            redirectView.addStaticAttribute("user_id", user_id);
+            redirectView.addStaticAttribute("pw", pw);
+        }
+
+        return redirectView;
     }
 
-    @RequestMapping(value = "/fileupload", method = RequestMethod.POST)
+    @RequestMapping(value = "/fileupload")
     public Object fileupload(@RequestParam("user_id") Integer id, @RequestParam("pw") String pw){
         RedirectView redirectView;
         if (pw.equals(userDao.findById(id).get().getPw())){
@@ -140,7 +161,7 @@ public class WebController {
         reviewDao.deleteById(review_id);
 
         RedirectView redirectView = new RedirectView("/review");
-        redirectView.addStaticAttribute("id", review.getUser_id());
+        redirectView.addStaticAttribute("user_id", review.getUser_id());
 
         return redirectView;
     }

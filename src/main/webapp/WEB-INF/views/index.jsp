@@ -89,9 +89,9 @@
             <div class="account-wall">
                 <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
                      alt="">
-                <form class="form-signin" action="/fileupload" method="post">
-                    <input type="text" class="form-control" placeholder="ID" name="user_id">
-                    <input type="password" class="form-control" placeholder="Password" name="pw">
+                <form class="form-signin" action="/login" method="post">
+                    <input type="text" class="form-control" placeholder="email" name="email">
+                    <input type="password" class="form-control" placeholder="password" name="pw">
                     <button class="btn btn-lg btn-primary btn-block" type="submit">
                         Sign in</button>
                 </form>
