@@ -1,12 +1,14 @@
 package kr.ac.jejunu.netflix;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,58 +18,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class WebController {
+public class ReviewController {
     private final UserDao userDao;
     private final ReviewDao reviewDao;
-
-    @RequestMapping("/")
-    public ModelAndView index(){
-        ModelAndView modelAndView = new ModelAndView("index");
-
-        return modelAndView;
-    }
-
-    @RequestMapping("/login")
-    public RedirectView login(@RequestParam("email") String email,
-                              @RequestParam("pw") String pw){
-        RedirectView redirectView;
-        List<User> users = userDao.findAll();
-        Integer user_id = null;
-        for(int i = 0; i<users.size(); i++){
-            if(users.get(i).getEmail().equals(email) && users.get(i).getPw().equals(pw)){
-                user_id = i+1;
-                break;
-            }
-        }
-
-        if(user_id==null){
-            redirectView = new RedirectView("/");
-        }
-        else {
-            redirectView = new RedirectView("fileupload");
-            redirectView.addStaticAttribute("user_id", user_id);
-        }
-
-        return redirectView;
-    }
-
-    @RequestMapping(value = "/fileupload")
-    public Object fileupload(@RequestParam("user_id") Integer id){
-        RedirectView redirectView;
-        String path = userDao.findById(id).get().getPath();
-        if(path == null){
-            ModelAndView modelAndView;
-            modelAndView = new ModelAndView("fileupload");
-            modelAndView.addObject("name", userDao.findById(id).get().getName());
-            modelAndView.addObject("user_id", userDao.findById(id).get().getId());
-            return modelAndView;
-        }
-        else{
-            redirectView = new RedirectView("review");
-            redirectView.addStaticAttribute("user_id", id);
-        }
-        return redirectView;
-    }
 
     @RequestMapping("/review")
     public ModelAndView review(@RequestParam(value = "user_id", required = false) Integer id) throws IOException {
@@ -81,7 +34,7 @@ public class WebController {
             String[] array = line.split(",");
             tmpList = Arrays.asList(array);
             for(int i=0; i<tmpList.size(); i++){
-                 tmpList.set(i, tmpList.get(i).replaceAll("\"", ""));
+                tmpList.set(i, tmpList.get(i).replaceAll("\"", ""));
             }
             List<String> tmpTitle = Arrays.asList(tmpList.get(0).split(":"));
             String title = "";
