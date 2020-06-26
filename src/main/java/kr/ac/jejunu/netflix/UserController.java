@@ -62,13 +62,14 @@ public class UserController {
             return new RedirectView("/");
         }
         else {
-            File file = new File(userDao.findById(user_id).get().getPath());
-            if(file.exists()){
+            String path = userDao.findById(user_id).get().getPath();
+            System.out.println(path);
+            if(path != null){
                 ModelAndView modelAndView = new ModelAndView("upload");
                 modelAndView.addObject("user_id", user_id);
                 return modelAndView;
             }
-            else{
+            else {
                 ModelAndView modelAndView = new ModelAndView("fileupload");
                 modelAndView.addObject("name", userDao.findById(user_id).get().getName());
                 modelAndView.addObject("user_id", user_id);
