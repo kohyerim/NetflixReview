@@ -60,6 +60,14 @@
         .contact-form button:focus{
             box-shadow:none;
         }
+        #reviewBtn{
+            background-color : #f7f8f9;
+            text-align: left;
+            font-weight:300;
+            color : black;
+            width: 100%;
+            height:100%;
+        }
     </style>
 </head>
 <body>
@@ -89,11 +97,13 @@
                 <c:forEach items="${reviews}" var="review">
                     <div class="card mt-3 tab-card">
                         <div class="tab-content">
-                            <div class="tab-pane fade show active p-3" role="tabpanel" aria-labelledby="one-tab"
-                                 onclick=location.href="/view?review_id=${review.review_id}&user_id=${user_id}">
-                                [${review.netflix_title}]
-                                    ${review.review_title}
-                            </div>
+                            <form name="hiddenForm" action="/view" method="post">
+                                <div class="tab-pane fade show active p-3" role="tabpanel" aria-labelledby="one-tab">
+                                    <button type="submit" class="btn btn-default form-inline" id="reviewBtn">[${review.netflix_title}] ${review.review_title}</button>
+                                </div>
+                                <input type="text" value="${review.review_id}" name="review_id" style="display: none;">
+                                <input type="text" value="${user_id}" name="user_id" style="display:none;">
+                            </form>
                         </div>
                     </div>
                 </c:forEach>

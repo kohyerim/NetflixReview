@@ -47,9 +47,8 @@ public class UserController {
     }
 
     @RequestMapping("/login")
-    public RedirectView login(@RequestParam("email") String email,
+    public Object login(@RequestParam("email") String email,
                               @RequestParam("pw") String pw){
-        RedirectView redirectView;
         List<User> users = userDao.findAll();
         Integer user_id = null;
         for(int i = 0; i<users.size(); i++){
@@ -60,32 +59,30 @@ public class UserController {
         }
 
         if(user_id==null){
-            redirectView = new RedirectView("/");
+            return new RedirectView("/");
         }
         else {
-            redirectView = new RedirectView("fileupload");
-            redirectView.addStaticAttribute("user_id", user_id);
+            ModelAndView modelAndView = new ModelAndView("upload");
+            modelAndView.addObject("user_id", user_id);
+            return modelAndView;
         }
-
-        return redirectView;
     }
 
     @RequestMapping(value = "/fileupload")
-    public Object fileupload(@RequestParam("user_id") Integer id){
-        RedirectView redirectView;
+    public ModelAndView fileupload(@RequestParam("user_id") Integer id){
         String path = userDao.findById(id).get().getPath();
+        ModelAndView modelAndView;
         if(path == null){
-            ModelAndView modelAndView;
             modelAndView = new ModelAndView("fileupload");
             modelAndView.addObject("name", userDao.findById(id).get().getName());
             modelAndView.addObject("user_id", userDao.findById(id).get().getId());
             return modelAndView;
         }
         else{
-            redirectView = new RedirectView("review");
-            redirectView.addStaticAttribute("user_id", id);
+            modelAndView = new ModelAndView("upload");
+            modelAndView.addObject("user_id", id);
         }
-        return redirectView;
+        return modelAndView;
     }
 
     @RequestMapping("/upload")

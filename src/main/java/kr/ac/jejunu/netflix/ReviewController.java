@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +22,7 @@ public class ReviewController {
     private final ReviewDao reviewDao;
 
     @RequestMapping("/review")
-    public ModelAndView review(@RequestParam(value = "user_id", required = false) Integer id) throws IOException {
+    public ModelAndView review(@RequestParam(value = "user_id") Integer id) throws IOException {
         List<List<String>> list = new ArrayList<>();
         List<String> titleList = new ArrayList<>();
         BufferedReader br;
@@ -79,20 +78,19 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public RedirectView register(@RequestParam("netflix_title") String netflix_title,
+    public ModelAndView register(@RequestParam("netflix_title") String netflix_title,
                                  @RequestParam("user_id") Integer user_id,
                                  @RequestParam("date") String date,
                                  @RequestParam("review_title") String review_title,
                                  @RequestParam("comment") String comment,
                                  @RequestParam("stars") Integer stars){
-
-        RedirectView redirectView = new RedirectView("/review");
-        redirectView.addStaticAttribute("user_id", user_id);
+        ModelAndView modelAndView = new ModelAndView("upload");
+        modelAndView.addObject("user_id", user_id);
 
         Review review = new Review();
         saveReview(user_id, netflix_title, date, review_title, comment, stars, review);
 
-        return redirectView;
+        return modelAndView;
     }
 
     @RequestMapping(value = "view")
@@ -104,14 +102,14 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "delete")
-    public RedirectView delete(@RequestParam("review_id") Integer review_id){
+    public ModelAndView delete(@RequestParam("review_id") Integer review_id){
         Review review = reviewDao.findById(review_id).get();
         reviewDao.deleteById(review_id);
 
-        RedirectView redirectView = new RedirectView("/review");
-        redirectView.addStaticAttribute("user_id", review.getUser_id());
+        ModelAndView modelAndView = new ModelAndView("/upload");
+        modelAndView.addObject("user_id", review.getUser_id());
 
-        return redirectView;
+        return modelAndView;
     }
 
     @RequestMapping(value = "edit")
@@ -123,7 +121,7 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "update")
-    public RedirectView update(@RequestParam("review_id") Integer review_id,
+    public ModelAndView update(@RequestParam("review_id") Integer review_id,
                                @RequestParam("user_id") Integer user_id,
                                @RequestParam("netflix_title") String netflix_title,
                                @RequestParam("date") String date,
@@ -133,10 +131,10 @@ public class ReviewController {
         Review review = reviewDao.findById(review_id).get();
         saveReview(user_id, netflix_title, date, review_title, comment, stars, review);
 
-        RedirectView redirectView = new RedirectView("/review");
-        redirectView.addStaticAttribute("user_id", review.getUser_id());
+        ModelAndView modelAndView = new ModelAndView("/upload");
+        modelAndView.addObject("user_id", review.getUser_id());
 
-        return redirectView;
+        return modelAndView;
     }
 
     private ModelAndView getModelAndView(@RequestParam("review_id") Integer review_id, Review review, Integer user_id, String comment, ModelAndView modelAndView) {
