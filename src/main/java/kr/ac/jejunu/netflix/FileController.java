@@ -13,6 +13,7 @@ import java.io.*;
 @Controller
 @RequiredArgsConstructor
 public class FileController {
+    private final UserDao userDao;
     @RequestMapping("/upload")
     public ModelAndView upload(@RequestParam("user_id") Integer id,
                                @RequestParam("file") MultipartFile file,
@@ -27,6 +28,10 @@ public class FileController {
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
         bufferedOutputStream.write(file.getBytes());
         bufferedOutputStream.close();
+
+        User user = userDao.findById(id).get();
+        user.setPath(path.getPath());
+        userDao.save(user);
 
         ModelAndView modelAndView = new ModelAndView("upload");
         modelAndView.addObject("user_id", id);

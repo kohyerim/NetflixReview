@@ -12,24 +12,11 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <style>
-        /* layout.css Style */
-        .upload-drop-zone {
-            height: 200px;
-            border-width: 2px;
-            margin-bottom: 20px;
+        body{
+            background-color: #B6B6B6;
         }
-
-        /* skin.css Style*/
-        .upload-drop-zone {
-            color: #ccc;
-            border-style: dashed;
-            border-color: #ccc;
-            line-height: 200px;
-            text-align: center
-        }
-        .upload-drop-zone.drop {
-            color: #222;
-            border-color: #222;
+        .container{
+            margin-top : 50px;
         }
     </style>
     <script>

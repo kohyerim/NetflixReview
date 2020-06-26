@@ -54,8 +54,8 @@ public class WebController {
     @RequestMapping(value = "/fileupload")
     public Object fileupload(@RequestParam("user_id") Integer id){
         RedirectView redirectView;
-        File file = new File(userDao.findById(id).get().getPath());
-        if(!file.exists()){
+        String path = userDao.findById(id).get().getPath();
+        if(path == null){
             ModelAndView modelAndView;
             modelAndView = new ModelAndView("fileupload");
             modelAndView.addObject("name", userDao.findById(id).get().getName());
