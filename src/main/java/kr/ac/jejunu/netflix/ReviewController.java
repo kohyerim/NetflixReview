@@ -96,10 +96,11 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "view")
-    public ModelAndView view(@RequestParam("review_id") Integer review_id){
+    public ModelAndView view(@RequestParam("review_id") Integer review_id,
+                             @RequestParam("user_id") Integer user_id){
         Review review = reviewDao.findById(review_id).get();
         ModelAndView modelAndView = new ModelAndView("view");
-        return getModelAndView(review_id, review, review.getReview_content(), modelAndView);
+        return getModelAndView(review_id, review, user_id, review.getReview_content(), modelAndView);
     }
 
     @RequestMapping(value = "delete")
@@ -116,21 +117,9 @@ public class ReviewController {
     @RequestMapping(value = "edit")
     public ModelAndView edit(@RequestParam("review_id") Integer review_id){
         Review review = reviewDao.findById(review_id).get();
+        Integer user_id = review.getUser_id();
         ModelAndView modelAndView = new ModelAndView("edit");
-        return getModelAndView(review_id, review, review.getReview_content().replaceAll("<br>", "\n"), modelAndView);
-    }
-
-    private ModelAndView getModelAndView(@RequestParam("review_id") Integer review_id, Review review, String comment, ModelAndView modelAndView) {
-        modelAndView.addObject("review_id", review_id);
-        modelAndView.addObject("user_id", reviewDao.findById(review_id).get().getUser_id());
-        modelAndView.addObject("title", review.getNetflix_title());
-        modelAndView.addObject("date", review.getDate());
-        modelAndView.addObject("name", userDao.findById(reviewDao.findById(review_id).get().getUser_id()).get().getName());
-        modelAndView.addObject("review_title", review.getReview_title());
-        modelAndView.addObject("comment", comment);
-        modelAndView.addObject("stars", review.getStars());
-
-        return modelAndView;
+        return getModelAndView(review_id, review, user_id, review.getReview_content().replaceAll("<br>", "\n"), modelAndView);
     }
 
     @RequestMapping(value = "update")
@@ -148,6 +137,20 @@ public class ReviewController {
         redirectView.addStaticAttribute("user_id", review.getUser_id());
 
         return redirectView;
+    }
+
+    private ModelAndView getModelAndView(@RequestParam("review_id") Integer review_id, Review review, Integer user_id, String comment, ModelAndView modelAndView) {
+        modelAndView.addObject("review_id", review_id);
+        modelAndView.addObject("author_id", reviewDao.findById(review_id).get().getUser_id());
+        modelAndView.addObject("user_id", user_id);
+        modelAndView.addObject("title", review.getNetflix_title());
+        modelAndView.addObject("date", review.getDate());
+        modelAndView.addObject("name", userDao.findById(reviewDao.findById(review_id).get().getUser_id()).get().getName());
+        modelAndView.addObject("review_title", review.getReview_title());
+        modelAndView.addObject("comment", comment);
+        modelAndView.addObject("stars", review.getStars());
+
+        return modelAndView;
     }
 
     private void saveReview(@RequestParam("user_id") Integer user_id, @RequestParam("title") String netflix_title, @RequestParam("date") String date, @RequestParam("review_title") String review_title, @RequestParam("comment") String comment, @RequestParam("stars") Integer stars, Review review) {

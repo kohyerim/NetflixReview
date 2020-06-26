@@ -17,6 +17,10 @@
         body{
             background-color: #B6B6B6;
         }
+        h4{
+            margin-top : -30px;
+            margin-bottom: 20px;
+        }
         .contact{
             padding: 4%;
             height: 400px;
@@ -64,6 +68,7 @@
         <div class="col-md-6 blue">
             <div class="contact-info">
                 <h2>Review</h2>
+                <h4>${name}님, 안녕하세요</h4>
                 <div class="row">
                     <div class="col-sm-8">
                         <form action="write" method="post" class="form-inline">
@@ -85,7 +90,7 @@
                     <div class="card mt-3 tab-card">
                         <div class="tab-content">
                             <div class="tab-pane fade show active p-3" role="tabpanel" aria-labelledby="one-tab"
-                                 onclick=location.href="/view?review_id=${review.review_id}">
+                                 onclick=location.href="/view?review_id=${review.review_id}&user_id=${user_id}">
                                 [${review.netflix_title}]
                                     ${review.review_title}
                             </div>

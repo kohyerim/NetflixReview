@@ -77,6 +77,32 @@
                     return null;
             }
         }
+        function checkAuthor(id) {
+            if(id == ${user_id}){
+                document.write(" <div class=\"contact-form\">\n" +
+                    "                <div class=\"col-sm-20\">\n" +
+                    "                    <form action=\"/edit\" method=\"post\">\n" +
+                    "                        <div class=\"form-group\">\n" +
+                    "                            <div class=\"col-sm-offset-2 col-sm-10\">\n" +
+                    "                                <input style=\"display: none\" type=\"text\" name=\"review_id\" value=\"${review_id}\">\n" +
+                    "                                <button type=\"submit\" class=\"btn btn-default\">수정</button>\n" +
+                    "                            </div>\n" +
+                    "                        </div>\n" +
+                    "                    </form>\n" +
+                    "                </div>\n" +
+                    "                <div class=\"col-sm-10\">\n" +
+                    "                    <form action=\"/delete\" method=\"get\">\n" +
+                    "                        <div class=\"form-group\">\n" +
+                    "                            <div class=\"col-sm-offset-2 col-sm-20\">\n" +
+                    "                                <input style=\"display: none\" type=\"text\" name=\"review_id\" value=\"${review_id}\">\n" +
+                    "                                <button type=\"submit\" class=\"btn btn-default\">삭제</button>\n" +
+                    "                            </div>\n" +
+                    "                        </div>\n" +
+                    "                    </form>\n" +
+                    "                </div>\n" +
+                    "            </div>")
+            }
+        }
     </script>
 </head>
 <body>
@@ -156,28 +182,7 @@
                         <script>getStars(${stars});</script>
                     </div>
                 </div>
-            </div>
-            <div class="contact-form">
-                <div class="col-sm-20">
-                    <form action="/edit" method="post">
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <input style="display: none" type="text" name="review_id" value="${review_id}">
-                                <button type="submit" class="btn btn-default">수정</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-sm-10">
-                    <form action="/delete" method="get">
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-20">
-                                <input style="display: none" type="text" name="review_id" value="${review_id}">
-                                <button type="submit" class="btn btn-default">삭제</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <script>checkAuthor(${author_id})</script>
             </div>
         </div>
     </div>
