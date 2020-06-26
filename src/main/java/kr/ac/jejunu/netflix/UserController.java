@@ -62,26 +62,29 @@ public class UserController {
             return new RedirectView("/");
         }
         else {
-            ModelAndView modelAndView = new ModelAndView("upload");
-            modelAndView.addObject("user_id", user_id);
-            return modelAndView;
+            File file = new File(userDao.findById(user_id).get().getPath());
+            if(file.exists()){
+                ModelAndView modelAndView = new ModelAndView("upload");
+                modelAndView.addObject("user_id", user_id);
+                return modelAndView;
+            }
+            else{
+                ModelAndView modelAndView = new ModelAndView("fileupload");
+                modelAndView.addObject("name", userDao.findById(user_id).get().getName());
+                modelAndView.addObject("user_id", user_id);
+                return modelAndView;
+            }
         }
     }
 
     @RequestMapping(value = "/fileupload")
     public ModelAndView fileupload(@RequestParam("user_id") Integer id){
-        String path = userDao.findById(id).get().getPath();
         ModelAndView modelAndView;
-        if(path == null){
-            modelAndView = new ModelAndView("fileupload");
-            modelAndView.addObject("name", userDao.findById(id).get().getName());
-            modelAndView.addObject("user_id", userDao.findById(id).get().getId());
-            return modelAndView;
-        }
-        else{
-            modelAndView = new ModelAndView("upload");
-            modelAndView.addObject("user_id", id);
-        }
+
+        modelAndView = new ModelAndView("fileupload");
+        modelAndView.addObject("name", userDao.findById(id).get().getName());
+        modelAndView.addObject("user_id", userDao.findById(id).get().getId());
+
         return modelAndView;
     }
 
@@ -95,6 +98,7 @@ public class UserController {
             folderMaker.mkdir();
         }
         File path = new File(pathStr + file.getOriginalFilename());
+
         FileOutputStream fileOutputStream = new FileOutputStream(path);
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
         bufferedOutputStream.write(file.getBytes());
@@ -106,7 +110,6 @@ public class UserController {
 
         ModelAndView modelAndView = new ModelAndView("upload");
         modelAndView.addObject("user_id", id);
-        modelAndView.addObject("path", pathStr+file.getOriginalFilename());
 
         return modelAndView;
     }
