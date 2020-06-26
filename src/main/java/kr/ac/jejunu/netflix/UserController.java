@@ -25,6 +25,27 @@ public class UserController {
         return modelAndView;
     }
 
+    @RequestMapping("/signup")
+    public ModelAndView signup(){
+        return new ModelAndView("signup");
+    }
+
+    @RequestMapping(value = "/userRegister", method = RequestMethod.POST)
+    public ModelAndView userRegiter(@RequestParam("email") String email,
+                                    @RequestParam("name") String name,
+                                    @RequestParam("pw") String pw){
+        User user = new User();
+        user.setEmail(email);
+        user.setName(name);
+        user.setPw(pw);
+        userDao.save(user);
+
+        ModelAndView modelAndView = new ModelAndView("userRegister");
+        modelAndView.addObject("user_id", user.getId());
+
+        return modelAndView;
+    }
+
     @RequestMapping("/login")
     public RedirectView login(@RequestParam("email") String email,
                               @RequestParam("pw") String pw){

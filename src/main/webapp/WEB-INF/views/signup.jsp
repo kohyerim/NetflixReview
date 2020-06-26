@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HOME</title>
+    <title>SIGN UP</title>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -90,17 +90,14 @@
 <div class="container" style="margin-top:10%">
     <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
-            <h1 class="text-center login-title"> NETFLIX REVIEW </h1>
+            <h1 class="text-center login-title"> SIGN UP </h1>
             <div class="account-wall">
-                <form class="form-signin" action="/login" method="post">
+                <form class="form-signin" action="/userRegister" method="post">
                     <input type="text" class="form-control" placeholder="email" name="email"><br>
+                    <input type="text" class="form-control" placeholder="name" name="name"><br>
                     <input type="password" class="form-control" placeholder="password" name="pw">
                     <button class="btn btn-lg btn-primary btn-block" type="submit">
-                        Sign in</button>
-                </form>
-                <form class="form-signup" action="/signup" method="post">
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">
-                        Sign up</button>
+                        Register</button>
                 </form>
             </div>
         </div>
